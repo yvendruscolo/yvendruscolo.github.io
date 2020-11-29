@@ -1,6 +1,5 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>Ol&aacute!</title><link href="favicon.png" rel="icon" type="image/png"><meta content="width=device-width, initial-scale=1" name="viewport"><link id="pagestyle" rel="stylesheet" type="text/css"><script>var styles = [
+var styles = [
     "https://unpkg.com/sakura.css/css/sakura.css",
-    "https://cdn.jsdelivr.net/npm/water.css@2/out/light.css",
     "https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css",
     "https://unpkg.com/chota@latest",
     "https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css",
@@ -14,4 +13,4 @@
     "https://cdn.jsdelivr.net/npm/holiday.css@0.9.5"
   ];
 var sheet = styles[Math.floor(Math.random() * styles.length)];
-document.getElementById('pagestyle').setAttribute('href', sheet);</script></head><body><center><h1>Hi!</h1><h3>Nothing here yet, check it out later ... &#9951;</h3></center></body></html>
+document.getElementById('pagestyle').setAttribute('href', sheet);
