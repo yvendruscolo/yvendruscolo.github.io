@@ -32,8 +32,6 @@ let index =
     [ title' "Ol&aacute!" ; pagestyle ; randomStyle ; htmlx ]
     [ body' ]
 
-let renderTo file content = File.WriteAllText($"{file}.html", renderHtml content)
+let renderTo file content = File.WriteAllText($"public/{file}.html", renderHtml content)
 
 renderTo "index" index
-
-
