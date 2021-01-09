@@ -9,35 +9,46 @@ open Falco.Markup.Text
 
 open FSharp.Formatting.Markdown
 
-let script' source = script [ src source ; type' "text/javascript" ; create "async" "true"] []
+[<AutoOpen>]
+module FileNames =
+  let postListF = "post-list"
+  let aboutMeF = "about"
 
-let htmlx = script' "https://unpkg.com/htmx.org@1.0.2/dist/htmx.min.js"
+[<AutoOpen>]
+module CustomElements =
+  let script' source = script [ src source ; type' "text/javascript" ; create "async" "true"] []
+  let pagestyle = link [ id "pagestyle" ; rel "stylesheet" ; type' "text/css"]
+  let center = tag "center" []
+  let h2' txt = h2 [] [ raw txt ]
+  let title' txt = title [] [ raw txt ]
 
-let randomStyle = script' "random-stylesheet.js"
+[<AutoOpen>]
+module Javascripts =
+  let htmlx = script' "https://unpkg.com/htmx.org@1.0.2/dist/htmx.min.js"
+  let randomStyle = script' "random-stylesheet.js"
 
-let pagestyle = link [ id "pagestyle" ; rel "stylesheet" ; type' "text/css"]
+[<AutoOpen>]
+module FileSystemsUtils =
+  let filename (path: string) = path |> Path.GetFileNameWithoutExtension
+  let spit file content = File.WriteAllTextAsync($"public/{file}.html", content) |> Async.AwaitTask
+  let mdToHtml = Markdown.Parse >> Markdown.ToHtml >> String.filter ("\n\r".Contains >> not)
+  let renderSpit (page, content) = renderHtml content |> spit (filename page)
 
-let center = tag "center" []
+[<AutoOpen>]
+module StyesAndAttrs =
+  let mkAttrs = List.map (fun (k,v) -> Attr.create k v)
+  let swapFocus url = mkAttrs ["hx-swap","innerHTML"
+                               "hx-target","#focus"
+                               "hx-trigger","click"
+                               "hx-get", $"{url}.html"]
 
-let h1' txt = h1 [] [ raw txt ]
+  let mkStyles styles =
+    "style", styles |> Seq.ofList
+                    |> Seq.map (fun (k,v) -> $"{k}: {v}")
+                    |> String.concat ";"
 
-let title' txt = title [] [ raw txt ]
-
-let filename (path: string) = path |> Path.GetFileNameWithoutExtension
-
-let spit file content = File.WriteAllTextAsync($"public/{file}.html", content) |> Async.AwaitTask
-
-let mdToHtml = Markdown.Parse >> Markdown.ToHtml >> String.filter ("\n\r".Contains >> not)
-
-let mkAttrs = List.map (fun (k,v) -> Attr.create k v)
-
-let swapPost url = mkAttrs ["hx-swap","innerHTML";
-                            "hx-target","#posts-body";
-                            "hx-trigger","click";
-                            "hx-get", $"{url}.html"]
-
-let renderSpit (page, content) = renderHtml content |> spit (filename page)
-
-let postListFile = "post-list"
-
-let doRun work = work |> Async.Parallel |> Async.Ignore |> Async.RunSynchronously
+  let navAttrs pontTo =
+    mkAttrs [ mkStyles ["display","inline-block";
+                        "margin-right","50px";
+                        "margin-left","50px"]]
+    @ swapFocus pontTo

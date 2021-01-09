@@ -6,22 +6,26 @@ open Falco.Markup.Text
 open Utils
 open Posts
 
+let aboutMe = div [] []
+
 let body' =
   body []  [
-    center [ h1' "Hi!"
-             h3 [ create "word-wrap" "break-word" ]
-                [ raw "Nothing here yet, check it out later ... &#9951;" ]
-             span [] [ p (swapPost postListFile) [ raw "🗒 Posts" ] ]
-             div [ id "posts-body" ]
-                 [ postList ] ] ]
+    center [ h2' "Welcome to my little corner on the internet!"
+             div (mkAttrs ["display","block"])
+                  [ h3 (navAttrs aboutMeF) [raw "About me"]
+                    h3 (navAttrs postListF) [raw "🗒 Posts"] ]
+             div [ id "focus" ]
+                 [ ] ] ]
 
-let index =
-  html5 "en"
-    [ title' "Ol&aacute!" ; pagestyle ; randomStyle ; htmlx ]
-    [ body' ]
+let index = html5 "en" [ title' "👋 Ol&aacute!"
+                         pagestyle
+                         randomStyle
+                         htmlx ]
+              [ body' ]
 
-[|"index", index;
-  postListFile, postList|]
+[|"index", index
+  postListF, postList
+  aboutMeF, aboutMe|]
 |> Seq.map renderSpit
 |> Seq.append (renderPosts ())
-|> doRun
+|> Async.Parallel |> Async.Ignore |> Async.RunSynchronously
