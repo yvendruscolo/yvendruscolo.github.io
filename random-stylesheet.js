@@ -4,7 +4,7 @@ var styles = [
     "https://unpkg.com/chota@latest",
     "https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css",
     "https://classless.de/classless.css",
-    "https://unpkg.com/awsm.css/dist/awsm.min.css",
+    "https://unpkg.com/awsm.css@3.0.7/dist/awsm.min.css",
     "https://unpkg.com/mvp.css",
     "https://cdn.jsdelivr.net/npm/@exampledev/new.css@1/new.min.css",
     "https://cdn.jsdelivr.net/gh/yegor256/tacit@gh-pages/tacit-css.min.css",
