@@ -2,3 +2,4 @@
 .lsp
 bin
 obj
+public/*.html

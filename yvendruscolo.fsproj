@@ -7,11 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Utils.fs" />
+    <Compile Include="Posts.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Falco" Version="3.0.2" />
+    <PackageReference Include="FSharp.Formatting" Version="7.2.9" />
   </ItemGroup>
 
 </Project>
