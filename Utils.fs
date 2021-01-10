@@ -2,6 +2,8 @@ module Utils
 
 open System.IO
 
+open FSharpPlus
+
 open Falco.Markup
 open Falco.Markup.Attr
 open Falco.Markup.Elem
@@ -36,19 +38,22 @@ module FileSystemsUtils =
 
 [<AutoOpen>]
 module StyesAndAttrs =
-  let mkAttrs = List.map (fun (k,v) -> Attr.create k v)
+  let mkAttrs = map (fun (k,v) -> Attr.create k v)
   let swapFocus url = mkAttrs ["hx-swap","innerHTML"
                                "hx-target","#focus"
                                "hx-trigger","click"
                                "hx-get", $"{url}.html"]
 
   let mkStyles styles =
-    "style", styles |> Seq.ofList
-                    |> Seq.map (fun (k,v) -> $"{k}: {v}")
+    "style", styles |> map (fun (k,v) -> $"{k}: {v}")
                     |> String.concat ";"
 
   let navAttrs pontTo =
     mkAttrs [ mkStyles ["display","inline-block";
                         "margin-right","50px";
-                        "margin-left","50px"]]
+                        "margin-left","50px"] ]
     @ swapFocus pontTo
+
+
+let inline first c = nth 0 c
+let inline runWork job = job |> Async.Parallel |> Async.Ignore |> Async.RunSynchronously

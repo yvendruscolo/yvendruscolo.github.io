@@ -15,6 +15,7 @@
   <ItemGroup>
     <PackageReference Include="Falco" Version="3.0.2" />
     <PackageReference Include="FSharp.Formatting" Version="7.2.9" />
+    <PackageReference Include="FSharpPlus" Version="1.1.7" />
   </ItemGroup>
 
 </Project>

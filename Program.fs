@@ -1,3 +1,5 @@
+open FSharpPlus
+
 open Falco.Markup.Attr
 open Falco.Markup.Elem
 open Falco.Markup.Templates
@@ -23,9 +25,10 @@ let index = html5 "en" [ title' "👋 Ol&aacute!"
                          htmlx ]
               [ body' ]
 
-[|"index", index
-  postListF, postList
-  aboutMeF, aboutMe|]
-|> Seq.map renderSpit
-|> Seq.append (renderPosts ())
-|> Async.Parallel |> Async.Ignore |> Async.RunSynchronously
+[| "index", index
+   postListF, postList ()
+   aboutMeF, aboutMe |]
+
+|> map renderSpit
+<|> renderPosts ()
+|> runWork

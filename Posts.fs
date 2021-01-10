@@ -2,13 +2,14 @@ module Posts
 
 open System.IO
 
+open FSharpPlus
+
 open Falco.Markup.Elem
 open Falco.Markup.Text
 
 open Utils
 
-let posts' = Directory.EnumerateFiles
-             >> Seq.filter (Path.GetExtension >> (=) ".md")
+let posts' = Directory.EnumerateFiles >> filter (String.endsWith ".md")
 
 let posts () = posts' "posts"
 
@@ -18,17 +19,16 @@ let renderPost post = async {
             |> spit (post |> filename)
     }
 
-let renderPosts = posts >> Seq.map renderPost
+let renderPosts = posts >> map renderPost >> toArray
 
-let postLink (post: string) =
-    let face = File.ReadLines(post) |> Seq.head
+let postHeadline = File.ReadLines >> first >> String.trimStart ['#';' '] >> raw
 
-    [ br []
-      section (post |> filename |> swapFocus)
-              [face.TrimStart([|'#';' '|]) |> raw] ]
+let postLink post =
+   section (post |> filename |> swapFocus)
+              [ postHeadline post ]
 
-let postList' =
-    posts >> Seq.sortByDescending (fun x -> x.Split('_').[0])
-    >> Seq.collect postLink >> List.ofSeq
-
-let postList = div [] (postList' ())
+let postList = posts
+            >> sortByDescending (String.split ["_"] >> first)
+            >> map postLink
+            >> intersperse (br [])
+            >> toList >> div []
